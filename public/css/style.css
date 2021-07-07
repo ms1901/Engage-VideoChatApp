@@ -478,6 +478,14 @@ navbar .logo {
   font-size: 20px;
   bottom: 10px;
 }
+.container-room .left-cont .video-cont .video-box .raise-hand  {
+  color: #d63434;
+  bottom: 10px;
+  position: absolute;
+  right: 40px;
+  font-size: 20px;
+  bottom: 10px;
+}
 .container-room .left-cont .video-cont-single {
   height: 75vh;
 }
@@ -517,9 +525,17 @@ navbar .logo {
 }
 .container-room .left-cont .video-cont-single .video-box .mute-icon {
   color: #d63434;
-  bottom: 10px;
+  
   position: absolute;
   right: 10px;
+  font-size: 20px;
+  bottom: 10px;
+}
+.container-room .left-cont .video-cont-single .video-box .raise-hand {
+  color: #d63434;
+  
+  position: absolute;
+  right: 40px;
   font-size: 20px;
   bottom: 10px;
 }
@@ -531,7 +547,7 @@ navbar .logo {
   margin: 0 auto;
   display: flex;
   margin-top: 50px;
-  width: 260px;
+  width: 300px;
   background-color: #ffffff;
   border-radius: 10px;
   padding: 10px;
@@ -595,9 +611,25 @@ navbar .logo {
   transition: background-color 0.3s;
   transition: color 0.3s;
 }
-.container-room .left-cont .footer .utils .board-icon:hover {
+
+.container-room .left-cont .footer .utils  .board-icon:hover {
   cursor: pointer;
   color: white;
+  background-color: #393e46;
+}
+.container-room .left-cont .footer .utils .hand {
+  background-color: #4ecca3;
+  text-align: center;
+  margin-left: 10px;
+  color: white;
+  padding: 10px;
+  height: 40px;
+  width: 40px;
+  border-radius: 100px;
+  transition: background-color 0.3s;
+}
+.container-room .left-cont .footer .utils  .hand:hover {
+  cursor: pointer;
   background-color: #393e46;
 }
 .container-room .left-cont .footer .utils .cutcall {

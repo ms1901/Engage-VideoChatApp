@@ -11,6 +11,7 @@ const continueButt = document.querySelector('.continue-name');
 const nameField = document.querySelector('#name-field');
 const videoButt = document.querySelector('.novideo');
 const audioButt = document.querySelector('.audio');
+const raise_hand_Butt=document.querySelector('.hand');
 const cutCall = document.querySelector('.cutcall');
 const screenShareButt = document.querySelector('.screenshare');
 const whiteboardButt = document.querySelector('.board-icon')
@@ -141,9 +142,10 @@ socket.on('draw', (newX, newY, prevX, prevY, color, size) => {
 
 let videoAllowed = 1;
 let audioAllowed = 1;
-
+let not_hand_raised=1;
 let micInfo = {};
 let videoInfo = {};
+let hand_raised={};
 
 let videoTrackReceived = {};
 
@@ -152,6 +154,9 @@ mymuteicon.style.visibility = 'hidden';
 
 let myvideooff = document.querySelector("#myvideooff");
 myvideooff.style.visibility = 'hidden';
+
+let my_raise_hand_icon = document.querySelector("#raise-my-hand");
+my_raise_hand_icon.style.visibility = 'hidden';
 
 const configuration = { iceServers: [{ urls: "stun:stun.stunprotocol.org" }] }
 
@@ -337,12 +342,13 @@ function open(evt, tab_to_open) {
     document.getElementById(tab_to_open).style.display = "block";
     evt.currentTarget.className += " active";
   }
-function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
+function handleVideoOffer(offer, sid, cname, micinf, vidinf,handinf) {
 
     cName[sid] = cname;
     console.log('video offered recevied');
     micInfo[sid] = micinf;
     videoInfo[sid] = vidinf;
+    hand_raised[sid]=handinf;
     connections[sid] = new RTCPeerConnection(configuration);
 
     connections[sid].onicecandidate = function (event) {
@@ -361,15 +367,19 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
             let name = document.createElement('div');
             let muteIcon = document.createElement('div');
             let videoOff = document.createElement('div');
+            let hand=document.createElement('div');
             videoOff.classList.add('video-off');
             muteIcon.classList.add('mute-icon');
+            hand.classList.add('raise-hand');
             name.classList.add('nametag');
             name.innerHTML = `${cName[sid]}`;
             vidCont.id = sid;
             muteIcon.id = `mute${sid}`;
             videoOff.id = `vidoff${sid}`;
+            hand.id=`hand${sid}`;
             muteIcon.innerHTML = `<i class="fas fa-microphone-slash"></i>`;
             videoOff.innerHTML = 'Video Off'
+            hand.innerHTML=`<i class="fas fa-hand-paper"></i>`;
             vidCont.classList.add('video-box');
             newvideo.classList.add('video-frame');
             newvideo.autoplay = true;
@@ -386,11 +396,15 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf) {
                 videoOff.style.visibility = 'hidden';
             else
                 videoOff.style.visibility = 'visible';
-
+            if(hand_raised[sid]=='on')
+                hand.style.visibility='visible';            
+            else
+                hand.style.visibility='hidden';
             vidCont.appendChild(newvideo);
             vidCont.appendChild(name);
             vidCont.appendChild(muteIcon);
             vidCont.appendChild(videoOff);
+            vidCont.appendChild(hand);
 
             videoContainer.appendChild(vidCont);
 
@@ -477,7 +491,7 @@ socket.on('new icecandidate', handleNewIceCandidate);
 socket.on('video-answer', handleVideoAnswer);
 
 
-socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
+socket.on('join room', async (conc, cnames, micinfo, videoinfo,handinfo) => {
     socket.emit('getCanvas');
     if (cnames)
         cName = cnames;
@@ -487,7 +501,9 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
 
     if (videoinfo)
         videoInfo = videoinfo;
-
+    if(handinfo){
+        hand_raised=handinfo;
+    }
 
     console.log(cName);
     if (conc) {
@@ -510,14 +526,18 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
                     let name = document.createElement('div');
                     let muteIcon = document.createElement('div');
                     let videoOff = document.createElement('div');
+                    let hand=document.createElement('div');
                     videoOff.classList.add('video-off');
+                    hand.classList.add('raise-hand');
                     muteIcon.classList.add('mute-icon');
                     name.classList.add('nametag');
                     name.innerHTML = `${cName[sid]}`;
                     vidCont.id = sid;
                     muteIcon.id = `mute${sid}`;
                     videoOff.id = `vidoff${sid}`;
+                    muteIcon.id= `hand${sid}`;
                     muteIcon.innerHTML = `<i class="fas fa-microphone-slash"></i>`;
+                    hand.innerHTML=`<i class="fas fa-hand-paper"></i>`;
                     videoOff.innerHTML = 'Video Off'
                     vidCont.classList.add('video-box');
                     newvideo.classList.add('video-frame');
@@ -535,12 +555,15 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo) => {
                         videoOff.style.visibility = 'hidden';
                     else
                         videoOff.style.visibility = 'visible';
-
+                    if(hand_raised[sid]=='on')
+                        hand.style.visibility='visible';            
+                    else
+                        hand.style.visibility='hidden';
                     vidCont.appendChild(newvideo);
                     vidCont.appendChild(name);
                     vidCont.appendChild(muteIcon);
                     vidCont.appendChild(videoOff);
-
+                    vidCont.appendChild(hand);
                     videoContainer.appendChild(vidCont);
 
                 }
@@ -661,7 +684,23 @@ videoButt.addEventListener('click', () => {
         socket.emit('action', 'videoon');
     }
 })
+raise_hand_Butt.addEventListener('click',() =>
+{
+    console.log("hand_raised");
+    if(not_hand_raised){
+        not_hand_raised=0;
+        raise_hand_Butt.style.backgroundColor = "#b12c2c";
+        my_raise_hand_icon.style.visibility = 'visible';
+        socket.emit('action', 'raise_hand');
+    }
+    else{
+        not_hand_raised=1;
+        my_raise_hand_icon.style.visibility = 'hidden';
+        raise_hand_Butt.style.backgroundColor = "#4ECCA3";
+       socket.emit('action', 'hand_down');
+    }
 
+})
 
 audioButt.addEventListener('click', () => {
 
@@ -723,6 +762,16 @@ socket.on('action', (msg, sid) => {
         console.log(sid + 'turned video on');
         document.querySelector(`#vidoff${sid}`).style.visibility = 'hidden';
         videoInfo[sid] = 'on';
+    }
+    else if (msg == 'raise_hand') {
+        console.log(sid + ' raised hand');
+        document.querySelector(`#hand${sid}`).style.visibility = 'visible';
+        hand_raised[sid]='on';
+    }
+    else if (msg == 'hand_down') {
+        console.log(sid + ' hand_dowm');
+        document.querySelector(`#hand${sid}`).style.visibility = 'hidden';
+        hand_raised[sid]='off';
     }
 })
 

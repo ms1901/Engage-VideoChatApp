@@ -3,7 +3,7 @@ const express = require('express')
 const http = require('http')
 const moment = require('moment');
 const socketio = require('socket.io');
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT |3000;
 
 const app = express();
 const server = http.createServer(app);
@@ -17,6 +17,7 @@ let socketroom = {};
 let socketname = {};
 let micSocket = {};
 let videoSocket = {};
+let handSocket = {};
 let roomBoard = {};
 
 io.on('connect', socket => {
@@ -28,17 +29,17 @@ io.on('connect', socket => {
         socketname[socket.id] = username;
         micSocket[socket.id] = 'on';
         videoSocket[socket.id] = 'on';
-
+        handSocket[socket.id]='off';
         if (rooms[roomid] && rooms[roomid].length > 0) {
             rooms[roomid].push(socket.id);
-            socket.to(roomid).emit('message', `${username} joined the room.`, 'Bot', moment().format(
+            socket.to(roomid).emit('message', `${username} joined the room.`, 'Engage Bot', moment().format(
                 "h:mm a"
             ));
-            io.to(socket.id).emit('join room', rooms[roomid].filter(pid => pid != socket.id), socketname, micSocket, videoSocket);
+            io.to(socket.id).emit('join room', rooms[roomid].filter(pid => pid != socket.id), socketname, micSocket, videoSocket,handSocket);
         }
         else {
             rooms[roomid] = [socket.id];
-            io.to(socket.id).emit('join room', null, null, null, null);
+            io.to(socket.id).emit('join room', null, null, null, null,null);
         }
 
         io.to(roomid).emit('user count', rooms[roomid].length);
@@ -54,12 +55,17 @@ io.on('connect', socket => {
             videoSocket[socket.id] = 'on';
         else if (msg == 'videooff')
             videoSocket[socket.id] = 'off';
+        else if (msg == 'hand_down')
+            handSocket[socket.id]='off';
+        else if (msg == 'raise_hand')
+            handSocket[socket.id]='on';
+        
 
         socket.to(socketroom[socket.id]).emit('action', msg, socket.id);
     })
 
     socket.on('video-offer', (offer, sid) => {
-        socket.to(sid).emit('video-offer', offer, socket.id, socketname[socket.id], micSocket[socket.id], videoSocket[socket.id]);
+        socket.to(sid).emit('video-offer', offer, socket.id, socketname[socket.id], micSocket[socket.id], videoSocket[socket.id],handSocket[socket.id]);
     })
 
     socket.on('video-answer', (answer, sid) => {
@@ -95,7 +101,7 @@ io.on('connect', socket => {
 
     socket.on('disconnect', () => {
         if (!socketroom[socket.id]) return;
-        socket.to(socketroom[socket.id]).emit('message', `${socketname[socket.id]} left the chat.`, `Bot`, moment().format(
+        socket.to(socketroom[socket.id]).emit('message', `${socketname[socket.id]} left the chat.`, `Engage Bot`, moment().format(
             "h:mm a"
         ));
         socket.to(socketroom[socket.id]).emit('remove peer', socket.id);
