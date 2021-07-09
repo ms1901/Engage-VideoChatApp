@@ -2,6 +2,7 @@ const socket = io();
 const myvideo = document.querySelector("#vd1");
 const roomid = params.get("room");
 let username;
+//const canvas1 = document.getElementById('canvas1');
 const chatRoom = document.querySelector('.chat-cont');
 const sendButton = document.querySelector('.chat-send');
 const messageField = document.querySelector('.chat-input');
@@ -11,6 +12,7 @@ const continueButt = document.querySelector('.continue-name');
 const nameField = document.querySelector('#name-field');
 const videoButt = document.querySelector('.novideo');
 const audioButt = document.querySelector('.audio');
+
 const raise_hand_Butt=document.querySelector('.hand');
 const cutCall = document.querySelector('.cutcall');
 const screenShareButt = document.querySelector('.screenshare');
@@ -592,12 +594,12 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo,handinfo) => {
 
         });
 
-        console.log('added all sockets to connections');
+       
         startCall();
 
     }
     else {
-        console.log('waiting for someone to join');
+       
         navigator.mediaDevices.getUserMedia(mediaConstraints)
             .then(localStream => {
                 myvideo.srcObject = localStream;
@@ -643,7 +645,7 @@ socket.on('message', (msg, sendername, time) => {
 });
 
 videoButt.addEventListener('click', () => {
-
+    console.log(videoAllowed);
     if (videoAllowed) {
         for (let key in videoTrackSent) {
             videoTrackSent[key].enabled = false;
@@ -659,6 +661,9 @@ videoButt.addEventListener('click', () => {
                 }
             })
         }
+       // myvideo .hidden = true;
+        //canvas1.hidden = false;
+
 
         myvideooff.style.visibility = 'visible';
 
@@ -670,7 +675,7 @@ videoButt.addEventListener('click', () => {
         }
         videoButt.innerHTML = `<i class="fas fa-video"></i>`;
         videoAllowed = 1;
-        videoButt.style.backgroundColor = "#4ECCA3";
+        videoButt.style.backgroundColor = "#505AC9";
         if (mystream) {
             mystream.getTracks().forEach(track => {
                 if (track.kind === 'video')
@@ -684,6 +689,7 @@ videoButt.addEventListener('click', () => {
         socket.emit('action', 'videoon');
     }
 })
+
 raise_hand_Butt.addEventListener('click',() =>
 {
     console.log("hand_raised");
@@ -696,7 +702,7 @@ raise_hand_Butt.addEventListener('click',() =>
     else{
         not_hand_raised=1;
         my_raise_hand_icon.style.visibility = 'hidden';
-        raise_hand_Butt.style.backgroundColor = "#4ECCA3";
+        raise_hand_Butt.style.backgroundColor = "#505AC9";
        socket.emit('action', 'hand_down');
     }
 
@@ -728,7 +734,7 @@ audioButt.addEventListener('click', () => {
         }
         audioButt.innerHTML = `<i class="fas fa-microphone"></i>`;
         audioAllowed = 1;
-        audioButt.style.backgroundColor = "#4ECCA3";
+        audioButt.style.backgroundColor = "#505AC9";
         if (mystream) {
             mystream.getTracks().forEach(track => {
                 if (track.kind === 'audio')
