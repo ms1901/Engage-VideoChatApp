@@ -17,7 +17,7 @@ const screenShareButt = document.querySelector('.screenshare');
 const whiteboardButt = document.querySelector('.board-icon')
 const whiteboardCloseBtn = document.querySelector(".whiteboardCloseBtn");
 
-//whiteboard js start
+//whiteboard 
 const whiteboardCont = document.querySelector('.whiteboard-cont');
 const canvas = document.querySelector("#whiteboard");
 const ctx = canvas.getContext('2d');
@@ -43,7 +43,7 @@ function fitToContainer(canvas) {
 
 fitToContainer(canvas);
 
-//getCanvas call is under join room call
+//getCanvas
 socket.on('getCanvas', url => {
     let img = new Image();
     img.onload = start;
@@ -66,14 +66,14 @@ function setEraser() {
     drawsize = 10;
 }
 
-//might remove this
+
 function reportWindowSize() {
     fitToContainer(canvas);
 }
 
 window.onresize = reportWindowSize;
-//
 
+//clear board function
 function clearBoard() {
     if (window.confirm('Are you sure you want to clear board? This cannot be undone')) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -171,7 +171,7 @@ let mystream, myscreenshare;
 
 
 document.querySelector('.roomcode').innerHTML = `${roomid}`
-
+//copy code
 function CopyClassText() {
 
     var textToCopy = document.querySelector('.roomcode');
@@ -201,7 +201,7 @@ function CopyClassText() {
     }, 5000);
 }
 
-
+//overlay - continue
 continueButt.addEventListener('click', () => {
     if (nameField.value == '') return;
     username = nameField.value;
@@ -326,26 +326,26 @@ function open(evt, tab_to_open) {
     
     var i, tabcontent, tablinks;
   
-    // Get all elements with class="tabcontent" and hide them
+    
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
       tabcontent[i].style.display = "none";
     }
   
-    // Get all elements with class="tablinks" and remove the class "active"
+    
     tablinks = document.getElementsByClassName("tablinks");
     for (i = 0; i < tablinks.length; i++) {
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
   
-    // Show the current tab, and add an "active" class to the button that opened the tab
+    
     document.getElementById(tab_to_open).style.display = "block";
     evt.currentTarget.className += " active";
   }
 function handleVideoOffer(offer, sid, cname, micinf, vidinf,handinf) {
 
     cName[sid] = cname;
-    console.log('video offered recevied');
+    
     micInfo[sid] = micinf;
     videoInfo[sid] = vidinf;
     hand_raised[sid]=handinf;
@@ -353,7 +353,7 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf,handinf) {
 
     connections[sid].onicecandidate = function (event) {
         if (event.candidate) {
-            console.log('icecandidate fired');
+           
             socket.emit('new icecandidate', event.candidate, sid);
         }
     };
@@ -361,7 +361,7 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf,handinf) {
     connections[sid].ontrack = function (event) {
 
         if (!document.getElementById(sid)) {
-            console.log('track event fired')
+            
             let vidCont = document.createElement('div');
             let newvideo = document.createElement('video');
             let name = document.createElement('div');
@@ -416,7 +416,7 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf,handinf) {
     connections[sid].onremovetrack = function (event) {
         if (document.getElementById(sid)) {
             document.getElementById(sid).remove();
-            console.log('removed a track');
+           
         }
     };
 
@@ -442,7 +442,7 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf,handinf) {
 
             localStream.getTracks().forEach(track => {
                 connections[sid].addTrack(track, localStream);
-                console.log('added local stream to peer')
+                
                 if (track.kind === 'audio') {
                     audioTrackSent[sid] = track;
                     if (!audioAllowed)
@@ -471,7 +471,7 @@ function handleVideoOffer(offer, sid, cname, micinf, vidinf,handinf) {
 }
 
 function handleNewIceCandidate(candidate, sid) {
-    console.log('new candidate recieved')
+   
     var newcandidate = new RTCIceCandidate(candidate);
 
     connections[sid].addIceCandidate(newcandidate)
@@ -479,7 +479,7 @@ function handleNewIceCandidate(candidate, sid) {
 }
 
 function handleVideoAnswer(answer, sid) {
-    console.log('answered the offer')
+   
     const ans = new RTCSessionDescription(answer);
     connections[sid].setRemoteDescription(ans);
 }
@@ -512,7 +512,7 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo,handinfo) => {
 
             connections[sid].onicecandidate = function (event) {
                 if (event.candidate) {
-                    console.log('icecandidate fired');
+                    
                     socket.emit('new icecandidate', event.candidate, sid);
                 }
             };
@@ -520,7 +520,7 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo,handinfo) => {
             connections[sid].ontrack = function (event) {
 
                 if (!document.getElementById(sid)) {
-                    console.log('track event fired')
+                    
                     let vidCont = document.createElement('div');
                     let newvideo = document.createElement('video');
                     let name = document.createElement('div');
@@ -592,12 +592,12 @@ socket.on('join room', async (conc, cnames, micinfo, videoinfo,handinfo) => {
 
         });
 
-        console.log('added all sockets to connections');
+       
         startCall();
 
     }
     else {
-        console.log('waiting for someone to join');
+        
         navigator.mediaDevices.getUserMedia(mediaConstraints)
             .then(localStream => {
                 myvideo.srcObject = localStream;
@@ -684,6 +684,7 @@ videoButt.addEventListener('click', () => {
         socket.emit('action', 'videoon');
     }
 })
+//hand raise event listener
 raise_hand_Butt.addEventListener('click',() =>
 {
     console.log("hand_raised");
@@ -701,7 +702,7 @@ raise_hand_Butt.addEventListener('click',() =>
     }
 
 })
-
+//audio button event listener
 audioButt.addEventListener('click', () => {
 
     if (audioAllowed) {
@@ -744,32 +745,32 @@ audioButt.addEventListener('click', () => {
 
 socket.on('action', (msg, sid) => {
     if (msg == 'mute') {
-        console.log(sid + ' muted themself');
+        
         document.querySelector(`#mute${sid}`).style.visibility = 'visible';
         micInfo[sid] = 'off';
     }
     else if (msg == 'unmute') {
-        console.log(sid + ' unmuted themself');
+        
         document.querySelector(`#mute${sid}`).style.visibility = 'hidden';
         micInfo[sid] = 'on';
     }
     else if (msg == 'videooff') {
-        console.log(sid + 'turned video off');
+        
         document.querySelector(`#vidoff${sid}`).style.visibility = 'visible';
         videoInfo[sid] = 'off';
     }
     else if (msg == 'videoon') {
-        console.log(sid + 'turned video on');
+        
         document.querySelector(`#vidoff${sid}`).style.visibility = 'hidden';
         videoInfo[sid] = 'on';
     }
     else if (msg == 'raise_hand') {
-        console.log(sid + ' raised hand');
+        
         document.querySelector(`#hand${sid}`).style.visibility = 'visible';
         hand_raised[sid]='on';
     }
     else if (msg == 'hand_down') {
-        console.log(sid + ' hand_dowm');
+       
         document.querySelector(`#hand${sid}`).style.visibility = 'hidden';
         hand_raised[sid]='off';
     }

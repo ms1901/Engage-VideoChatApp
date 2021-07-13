@@ -16,8 +16,8 @@ let rooms = {};
 let socketroom = {};
 let socketname = {};
 let micSocket = {};
-let videoSocket = {};
 let handSocket = {};
+let videoSocket = {};
 let roomBoard = {};
 
 io.on('connect', socket => {

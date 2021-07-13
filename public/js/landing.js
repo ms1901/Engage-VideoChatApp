@@ -2,8 +2,7 @@ const createButton = document.querySelector("#createroom");
 const codeCont = document.querySelector('#roomcode');
 const joinBut = document.querySelector('#joinroom');
 
-
-
+//room id function
 function uuidv4() {
     return 'xxyxyxxyx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -11,8 +10,8 @@ function uuidv4() {
     });
 }
 
-const createroomtext = 'Creating Room...';
-
+const createroomtext = 'Creating Room....';
+// creating room button
 createButton.addEventListener('click', (e) => {
     e.preventDefault();
     createButton.disabled = true;
@@ -28,10 +27,9 @@ createButton.addEventListener('click', (e) => {
         }
     }, 500);
 
-    //const name = nameField.value;
     location.href = `/room.html?room=${uuidv4()}`;
 });
-
+// join room button
 joinBut.addEventListener('click', (e) => {
     e.preventDefault();
     if (codeCont.value.trim() == "") {
