@@ -42,7 +42,7 @@ body {
 }
 
 navbar .logo {
-  font-size: 35px;
+  font-size: 45px;
   color: #464EB8;
   font-weight: bold;
   padding: 0 12%;
@@ -134,7 +134,7 @@ navbar .logo {
 .main .create-join .joinroom {
   margin-top: 20px;
   width: 100%;
-  text-align: right;
+  text-align: center;
   font-size: 24px;
   font-weight: bold;
   color: #232931;
@@ -147,45 +147,15 @@ navbar .logo {
   width: 100%;
   text-align: center;
 }
-.main .video-cont .video-self {
+.main .video-cont .video_img {
   height: 400px;
   width: 100%;
   background-color: #393e46;
   border-radius: 10px;
   object-fit: cover;
 }
-.main .video-cont .settings {
-  margin: 0 auto;
-  display: flex;
-  margin-top: 10px;
-  width: 100px;
-}
-.main .video-cont .settings .device {
-  background-color: #7B83EB;
-  border-radius: 100px;
-  padding: 10px;
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
-  color: white;
-}
-.main .video-cont .settings .device:hover {
-  background-color: #393e46;
-  cursor: pointer;
-}
-.main .video-cont .settings .nodevice {
-  background-color: #b12c2c;
-  border-radius: 100px;
-  padding: 10px;
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
-  color: white;
-}
-.main .video-cont .settings .nodevice:hover {
-  background-color: #393e46;
-  cursor: pointer;
-}
+
+
 
 @media (max-width: 1200px) {
   .main {
@@ -257,6 +227,49 @@ navbar .logo {
 }
 .overlay .box .continue-name:focus {
   outline: 0;
+}
+.overlay .video-cont {
+  width: 80%;
+  text-align: center;
+}
+.video-cont .video-self {
+  height: 400px;
+  width: 80%;
+  background-color: #393e46;
+  border-radius: 10px;
+  object-fit: cover;
+}
+.video-cont .settings {
+  margin: 0 auto;
+  display: flex;
+  margin-top: 10px;
+  width: 100px;
+}
+.video-cont .settings .device {
+  background-color: #4ecca3;
+  border-radius: 100px;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  color: white;
+}
+.video-cont .settings .device:hover {
+  background-color: #393e46;
+  cursor: pointer;
+}
+.video-cont .settings .nodevice {
+  background-color: #b12c2c;
+  border-radius: 100px;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  color: white;
+}
+.video-cont .settings .nodevice:hover {
+  background-color: #393e46;
+  cursor: pointer;
 }
 
 .container-room {

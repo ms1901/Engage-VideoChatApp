@@ -3,7 +3,7 @@ const express = require('express')
 const http = require('http')
 const moment = require('moment');
 const socketio = require('socket.io');
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT |3000;
 
 const app = express();
 const server = http.createServer(app);
@@ -109,7 +109,7 @@ io.on('connect', socket => {
         rooms[socketroom[socket.id]].splice(index, 1);
         io.to(socketroom[socket.id]).emit('user count', rooms[socketroom[socket.id]].length);
         delete socketroom[socket.id];
-        console.log('--------------------');
+       
         console.log(rooms[socketroom[socket.id]]);
 
         //toDo: push socket.id out of rooms
